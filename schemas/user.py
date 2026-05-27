@@ -12,4 +12,4 @@ class User(BaseModel):
     name: str
     email: str
     password: str
-    phone: str 
+    phone_number: str 
