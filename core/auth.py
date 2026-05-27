@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
 from schemas.user import User
+from database.connection import supabase
 
 load_dotenv()
 SECRET_KEY = os.getenv("JWT_TOKEN")
@@ -20,7 +21,7 @@ class TokenData(BaseModel):
 # create jwt token
 def create_access_session(data: dict):
     to_encode = data.copy()
-    expire = datetime() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp":expire})
     encoded_jwt = jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
     return encoded_jwt
@@ -41,8 +42,9 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise create_exception
 
-    user = user_db.get(token_data.username)
-    if user is None:
+    try:
+        user = supabase.table("users").select("*").eq("username", token_data.username).single().execute().data
+    except:
         raise create_exception
     return user
 
