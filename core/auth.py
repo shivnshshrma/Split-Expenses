@@ -5,10 +5,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
-
-# Absolute imports
-# from data.users import user_db
-from models.User import User
+from schemas.user import User
 
 load_dotenv()
 SECRET_KEY = os.getenv("JWT_TOKEN")
