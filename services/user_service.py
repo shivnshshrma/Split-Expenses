@@ -26,3 +26,15 @@ def get_user_by_username(username: str):
     if user.data:
         return user.data[0]
     return None
+
+def update_user_info(username: str, user_update):
+    update_user_data = {k: v for k, v in user_update.dict().items() if v is not None} # create a dict of fields to update, only include fields that are not None
+    if update_user_data:
+        supabase.table('users').update(update_user_data).eq("username", username).execute()
+        return {"message": "200 OK"}
+    else:
+        raise Exception("No valid fields to update")
+    
+def search_users_by_query(query: str):
+    users = supabase.table('users').select(f"username, email").islike("username", f"%{query}%").or_(f"email.ilike.%{query}%").execute().data
+    return users
