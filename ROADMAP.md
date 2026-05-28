@@ -1,14 +1,5 @@
 # Split-Expenses Roadmap
 
-## Phase 1: Fix Current Code & Structure
-- [ ] Fix imports in `main.py` (update to new paths)
-- [ ] Fix `core/auth.py` (datetime bug, broken user_db reference)
-- [ ] Create `database/connection.py` (shared Supabase client)
-- [ ] Create `core/security.py` (move password functions from main.py)
-- [ ] Create `services/user_service.py` (move create_user logic)
-- [ ] Create `api/endpoints/auth.py` (move auth routes)
-- [ ] Clean up `main.py` (only app init + router includes)
-- [ ] Test signup and login flow end-to-end
 
 ## Phase 2: User Management
 - [ ] Add user profile endpoint (GET /users/me)
