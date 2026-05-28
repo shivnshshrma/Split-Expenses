@@ -18,7 +18,8 @@ def create_user(user):
         raise Exception("Email already exists")
     else:
         supabase.table('users').insert(user_data).execute()
-        return {"message": "200 OK"}
+        return {"message": "User created successfully"}
+        
     
 
 def get_user_by_username(username: str):
