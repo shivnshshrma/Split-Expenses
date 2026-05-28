@@ -6,6 +6,8 @@
 # stay alive for few seconds (small time).
 
 from pydantic import BaseModel
+from typing import Optional
+
 
 class User(BaseModel):
     username: str
@@ -13,3 +15,8 @@ class User(BaseModel):
     email: str
     password: str
     phone_number: str 
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
