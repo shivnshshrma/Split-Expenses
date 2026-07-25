@@ -1,12 +1,28 @@
-from supabase import create_client, Client
-from dotenv import load_dotenv
-
 import os
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 
 load_dotenv()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set")
 
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+
+
+# For SQLite during tests or local development if needed, we might allow fallback or sqlite URL configurations.
+# But here we connect to PostgreSQL.
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

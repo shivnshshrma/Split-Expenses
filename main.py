@@ -2,6 +2,11 @@ from fastapi import FastAPI
 from api.endpoints.auth import router
 from api.endpoints.user import user_router
 from api.endpoints.groups import group_router
+from database.connection import engine, Base
+import database.models
+
+# Create tables if they do not exist
+Base.metadata.create_all(bind=engine)
 
 
 
