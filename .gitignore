@@ -140,3 +140,5 @@ tmp/
 # uv.lock
 
 ROADMAP.md
+uv.lock
+pyproject.toml
