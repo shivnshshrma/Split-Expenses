@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
-from schemas.user import User
-from database.connection import supabase
+from database.connection import SessionLocal
+from database.models import User
 
 load_dotenv()
 SECRET_KEY = os.getenv("JWT_TOKEN")
@@ -43,10 +43,21 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         raise create_exception
 
     try:
-        user = supabase.table("users").select("*").eq("username", token_data.username).single().execute().data
+        with SessionLocal() as db:
+            user_obj = db.query(User).filter(User.username == token_data.username).first()
+            if not user_obj:
+                raise create_exception
+            user = {
+                "username": user_obj.username,
+                "name": user_obj.name,
+                "email": user_obj.email,
+                "password": user_obj.password,
+                "phone_number": user_obj.phone_number
+            }
     except:
         raise create_exception
     return user
+
 
 
     
