@@ -137,7 +137,7 @@ temp/
 tmp/
 
 # UV lock file (optional - some prefer to commit it)
-# uv.lock
+uv.lock
 
 ROADMAP.md
 uv.lock
